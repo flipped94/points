@@ -17,4 +17,8 @@ public class LoginUserInfo {
      */
     private Integer id;
 
+    /**
+     * 用户邮箱
+     */
+    private String email;
 }

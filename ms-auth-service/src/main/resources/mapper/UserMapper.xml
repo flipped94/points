@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.points.auth.mapper.UserMapper">
+    <sql id="selectAlFiled">
+        select id, email, nickname, password, birthday, province, city, district, created_time, updated_time
+    </sql>
+    <select id="findByEmail" resultType="org.example.points.auth.entity.User">
+        <include refid="selectAlFiled"/>
+        from t_users
+        where email = #{email}
+    </select>
+</mapper>

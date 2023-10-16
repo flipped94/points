@@ -19,6 +19,7 @@
         <module>common</module>
         <module>mybatis-plus-generator</module>
         <module>mvc-config</module>
+        <module>ms-auth-service</module>
     </modules>
 
     <properties>
