@@ -21,6 +21,7 @@
         <module>mvc-config</module>
         <module>ms-auth-service</module>
         <module>ms-gateway</module>
+        <module>ms-service</module>
     </modules>
 
     <properties>
