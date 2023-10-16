@@ -22,6 +22,8 @@
         <module>ms-auth-service</module>
         <module>ms-gateway</module>
         <module>ms-service</module>
+        <module>ms-service/service-config</module>
+        <module>ms-service/service-sdk</module>
     </modules>
 
     <properties>
