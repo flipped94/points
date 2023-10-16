@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: ms-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.137.133:8848
+        namespace: points-dev
+
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        file-extension: yml
+        extension-configs:
+          - data-id: application.yml
+            group: ms-gateway
+
+    gateway:
+      routes:
+        - id: ms-article-service
+          uri: lb://ms-article-service
+          predicates:
+            - Path=/article/**
+
+routes:
+  urls:
+    - /login
+    - /register
+    - /refresh
+    - /article/portal

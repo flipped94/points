@@ -20,6 +20,7 @@
         <module>mybatis-plus-generator</module>
         <module>mvc-config</module>
         <module>ms-auth-service</module>
+        <module>ms-gateway</module>
     </modules>
 
     <properties>
@@ -29,6 +30,8 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
         <mysql.version>8.0.31</mysql.version>
+        <fastjson.version>2.0.21</fastjson.version>
+        <commons-collection4>4.4</commons-collection4>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +64,16 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collection4}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
