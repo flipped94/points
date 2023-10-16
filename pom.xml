@@ -24,6 +24,7 @@
         <module>ms-service</module>
         <module>ms-service/service-config</module>
         <module>ms-service/service-sdk</module>
+        <module>ms-service/ms-article-service</module>
     </modules>
 
     <properties>
@@ -35,6 +36,7 @@
         <mysql.version>8.0.31</mysql.version>
         <fastjson.version>2.0.21</fastjson.version>
         <commons-collection4>4.4</commons-collection4>
+        <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
     </properties>
 
     <dependencyManagement>
@@ -77,6 +79,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons-collection4}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

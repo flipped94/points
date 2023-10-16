@@ -7,9 +7,10 @@
         <groupId>org.example.points</groupId>
         <artifactId>points</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ms-service</artifactId>
+    <artifactId>ms-article-service</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,12 +21,13 @@
     <dependencies>
         <dependency>
             <groupId>org.example.points</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>service-config</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>org.example.points</groupId>
+            <artifactId>service-sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
