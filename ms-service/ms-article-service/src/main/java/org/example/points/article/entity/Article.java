@@ -73,12 +73,12 @@ public class Article implements Serializable {
     /**
      * 文章状态，1：审核中（用户已提交），2：机审结束，等待人工审核，3：审核通过（已发布），4：审核未通过；5：文章撤回（已发布的情况下才能撤回和删除）
      */
-    private Integer articleStatus;
+    private Integer status;
 
     /**
      * 发布者用户id
      */
-    private Integer publishUserId;
+    private Integer authorId;
 
     /**
      * 文章发布时间（也是预约发布的时间）
@@ -116,10 +116,10 @@ public class Article implements Serializable {
         Article article = new Article();
         BeanUtils.copyProperties(reqVO, article);
 
-        article.setArticleStatus(ArticleReviewStatus.REVIEWING.type);
+        article.setStatus(ArticleReviewStatus.REVIEWING.type);
         article.setCommentCounts(0);
         article.setReadCounts(0);
-        article.setPublishUserId(AccessContext.getLoginUserInfo().getId());
+        article.setAuthorId(AccessContext.getLoginUserInfo().getId());
 
         article.setIsDelete(YesOrNo.NO.type);
         article.setCreateTime(LocalDateTime.now());

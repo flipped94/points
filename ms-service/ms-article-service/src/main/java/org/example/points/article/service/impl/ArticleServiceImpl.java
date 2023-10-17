@@ -48,6 +48,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public PageResult<ArticleVO> articles(ArticleQueryParam queryParam) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("author_id", AccessContext.getLoginUserInfo().getId())
+                .eq("is_delete", YesOrNo.NO.type)
+                .eq(Objects.nonNull(queryParam.getStatus()), "status", queryParam.getStatus())
                 .orderByDesc("create_time");
         final Page<Article> page = page(new Page<>(queryParam.getPage(), queryParam.getPageSize()), queryWrapper);
         final List<Article> records = page.getRecords();
@@ -60,7 +62,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (Objects.isNull(article)) {
             throw new BusinessException(5000, "文章不存在");
         }
-        if (!article.getPublishUserId().equals(AccessContext.getLoginUserInfo().getId())) {
+        if (!article.getAuthorId().equals(AccessContext.getLoginUserInfo().getId())) {
             throw new BusinessException(5001, "权限不足");
         }
         UpdateWrapper<Article> updateWrapper = new UpdateWrapper<>();
@@ -76,7 +78,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (Objects.isNull(article)) {
             throw new BusinessException(5000, "文章不存在");
         }
-        if (!article.getPublishUserId().equals(AccessContext.getLoginUserInfo().getId())) {
+        if (!article.getAuthorId().equals(AccessContext.getLoginUserInfo().getId())) {
             throw new BusinessException(5001, "权限不足");
         }
         BeanUtils.copyProperties(articleVO, article);

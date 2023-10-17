@@ -36,12 +36,12 @@ public class ArticleVO {
     /**
      * 文章状态，1：审核中（用户已提交），2：机审结束，等待人工审核，3：审核通过（已发布），4：审核未通过；5：文章撤回（已发布的情况下才能撤回和删除）
      */
-    private Integer articleStatus;
+    private Integer status;
 
     /**
      * 发布者用户id
      */
-    private String publishUserId;
+    private String authorId;
 
     /**
      * 文章发布时间（也是预约发布的时间）
