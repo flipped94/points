@@ -1,7 +1,7 @@
 package org.example.points.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.example.points.article.PortalArticleQueryParam;
+import org.example.points.article.portal.PortalArticleQueryParam;
 import org.example.points.article.ArticleVO;
 import org.example.points.article.entity.Article;
 import org.example.points.common.vo.Page;

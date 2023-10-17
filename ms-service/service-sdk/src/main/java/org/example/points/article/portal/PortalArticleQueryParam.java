@@ -1,4 +1,4 @@
-package org.example.points.article;
+package org.example.points.article.portal;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

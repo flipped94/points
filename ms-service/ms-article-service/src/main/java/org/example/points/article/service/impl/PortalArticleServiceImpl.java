@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.points.article.ArticleVO;
-import org.example.points.article.PortalArticleQueryParam;
+import org.example.points.article.portal.PortalArticleQueryParam;
 import org.example.points.article.entity.Article;
 import org.example.points.article.mapper.ArticleMapper;
 import org.example.points.article.service.IPortalArticleService;

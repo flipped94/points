@@ -1,7 +1,7 @@
 package org.example.points.article.controller;
 
 import org.example.points.article.ArticleVO;
-import org.example.points.article.PortalArticleQueryParam;
+import org.example.points.article.portal.PortalArticleQueryParam;
 import org.example.points.article.service.IPortalArticleService;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.Page;
