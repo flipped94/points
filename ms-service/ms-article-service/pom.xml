@@ -5,9 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.example.points</groupId>
-        <artifactId>points</artifactId>
+        <artifactId>ms-service</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>ms-article-service</artifactId>
