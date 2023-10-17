@@ -95,7 +95,12 @@ public class TokenServiceImpl implements ITokenService {
         accessToken.setToken(TokenUtil.generate());
         final long hours = Duration.between(refreshToken.getExpirationTime(), accessToken.getExpirationTime()).toHours();
         if (hours > 2) {
-            accessToken.setExpirationTime(accessToken.getExpirationTime().plusHours(2));
+            accessToken.setExpirationTime(LocalDateTime.now().plusHours(2));
+        }
+        final long days = Duration.between(refreshToken.getExpirationTime(), LocalDateTime.now()).toDays();
+        if (days < 7) {
+            refreshToken.setExpirationTime(refreshToken.getExpirationTime().plusDays(15));
+            refreshTokenService.updateById(refreshToken);
         }
         accessTokenService.updateById(accessToken);
         return accessToken.getToken();

@@ -1,12 +1,12 @@
 package org.example.points.auth.controller;
 
 
+import org.example.points.auth.service.ITokenService;
+import org.example.points.auth.vo.EmailAndPassword;
 import org.example.points.common.constant.Constant;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.LoginUserInfo;
 import org.example.points.common.vo.Token;
-import org.example.points.auth.service.ITokenService;
-import org.example.points.auth.vo.EmailAndPassword;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -40,6 +40,7 @@ public class PassportController {
     public CommonResponse<Void> register(@RequestBody EmailAndPassword emailAndPassword, HttpServletResponse response) {
         final Token token = tokenService.registerAndGenerate(emailAndPassword);
         response.setHeader(Constant.HEADER_ACCESS_TOKEN, token.getAccessToken());
+        response.setHeader(Constant.HEADER_REFRESH_TOKEN, token.getRefreshToken());
         return new CommonResponse<>(200, "success");
     }
 
@@ -47,8 +48,7 @@ public class PassportController {
     public CommonResponse<Void> refresh(HttpServletRequest request, HttpServletResponse response) {
         final String refreshToken = request.getHeader(Constant.HEADER_REFRESH_TOKEN);
         final String accessToken = tokenService.refresh(refreshToken);
-        final Token token = new Token(refreshToken, accessToken);
-        response.setHeader(Constant.HEADER_ACCESS_TOKEN, token.getAccessToken());
+        response.setHeader(Constant.HEADER_ACCESS_TOKEN, accessToken);
         response.setHeader(Constant.HEADER_REFRESH_TOKEN, refreshToken);
         return new CommonResponse<>(200, "success");
     }
