@@ -19,7 +19,4 @@
         update_time
     </sql>
 
-    <select id="selectPageVo" resultType="org.example.points.article.ArticleVO">
-
-    </select>
 </mapper>
