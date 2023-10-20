@@ -1,6 +1,6 @@
 package org.example.points.auth.mapper;
 
-import org.example.points.auth.entity.User;
+import org.example.points.auth.entity.Account;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author flipped
  * @since 2023-10-14
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface AccountMapper extends BaseMapper<Account> {
 
-    User findByEmail(String email);
+    Account findByEmail(String email);
 }

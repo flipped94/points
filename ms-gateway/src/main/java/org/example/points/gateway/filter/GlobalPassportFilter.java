@@ -48,8 +48,8 @@ public class GlobalPassportFilter implements GlobalFilter, Ordered {
         final ServerHttpRequest request = exchange.getRequest();
         final ServerHttpResponse response = exchange.getResponse();
         final String path = request.getURI().getPath();
-        for (int i = 0; i < whiteList.getUrls().size(); i++) {
-            if (path.contains(whiteList.getUrls().get(i))) {
+        for (String string : whiteList.getUrls()) {
+            if (path.contains(string)) {
                 return chain.filter(exchange);
             }
         }

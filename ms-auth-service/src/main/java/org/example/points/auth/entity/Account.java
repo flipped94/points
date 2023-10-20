@@ -3,11 +3,12 @@ package org.example.points.auth.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <p>
@@ -19,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("t_users")
-public class User implements Serializable {
+@TableName("t_accounts")
+public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,35 +36,11 @@ public class User implements Serializable {
      */
     private String email;
 
-    /**
-     * 昵称
-     */
-    private String nickname;
 
     /**
      * 密码
      */
     private String password;
-
-    /**
-     * 生日
-     */
-    private LocalDate birthday;
-
-    /**
-     * 省份
-     */
-    private String province;
-
-    /**
-     * 城市
-     */
-    private String city;
-
-    /**
-     * 区县
-     */
-    private String district;
 
     /**
      * 创建时间

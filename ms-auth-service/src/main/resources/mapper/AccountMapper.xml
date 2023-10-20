@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.example.points.auth.mapper.UserMapper">
+<mapper namespace="org.example.points.auth.mapper.AccountMapper">
     <sql id="selectAlFiled">
-        select id, email, nickname, password, birthday, province, city, district, created_time, updated_time
+        select id, email, password, created_time, updated_time
     </sql>
-    <select id="findByEmail" resultType="org.example.points.auth.entity.User">
+    <select id="findByEmail" resultType="org.example.points.auth.entity.Account">
         <include refid="selectAlFiled"/>
-        from t_users
+        from t_accounts
         where email = #{email}
     </select>
 </mapper>

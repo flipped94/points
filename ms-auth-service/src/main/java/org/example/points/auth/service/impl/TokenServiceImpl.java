@@ -2,14 +2,16 @@ package org.example.points.auth.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.points.auth.entity.AccessToken;
+import org.example.points.auth.entity.Account;
 import org.example.points.auth.entity.RefreshToken;
-import org.example.points.auth.entity.User;
+import org.example.points.auth.mq.AccountRegisterProducer;
 import org.example.points.auth.service.IAccessTokenService;
+import org.example.points.auth.service.IAccountService;
 import org.example.points.auth.service.IRefreshTokenService;
 import org.example.points.auth.service.ITokenService;
-import org.example.points.auth.service.IUserService;
 import org.example.points.auth.utils.TokenUtil;
 import org.example.points.auth.vo.EmailAndPassword;
+import org.example.points.auth.vo.Register;
 import org.example.points.common.exception.BusinessException;
 import org.example.points.common.vo.LoginUserInfo;
 import org.example.points.common.vo.Token;
@@ -26,7 +28,7 @@ import java.util.Objects;
 public class TokenServiceImpl implements ITokenService {
 
     @Resource
-    private IUserService usersService;
+    private IAccountService accountService;
 
     @Resource
     private IRefreshTokenService refreshTokenService;
@@ -34,37 +36,42 @@ public class TokenServiceImpl implements ITokenService {
     @Resource
     private IAccessTokenService accessTokenService;
 
+    @Resource
+    private AccountRegisterProducer accountRegisterProducer;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Token generate(EmailAndPassword emailAndPassword) {
-        User user = usersService.findByEmail(emailAndPassword.getEmail());
-        if (Objects.isNull(user)) {
+        Account account = accountService.findByEmail(emailAndPassword.getEmail());
+        if (Objects.isNull(account)) {
             throw new BusinessException(4001, "账号不存在");
         }
 
-        if (!Objects.equals(user.getPassword(), emailAndPassword.getPassword())) {
+        if (!Objects.equals(account.getPassword(), emailAndPassword.getPassword())) {
             throw new BusinessException(4002, "密码错误");
         }
 
-        final String refreshToken = refreshTokenService.create(user.getId());
-        final String accessToken = accessTokenService.create(refreshToken, user.getId());
+        final String refreshToken = refreshTokenService.create(account.getId());
+        final String accessToken = accessTokenService.create(refreshToken, account.getId());
         return new Token(refreshToken, accessToken);
     }
 
     @Override
     @Transactional
-    public Token registerAndGenerate(EmailAndPassword emailAndPassword) {
-        final User oldUser = usersService.findByEmail(emailAndPassword.getEmail());
-        if (Objects.nonNull(oldUser)) {
+    public Token registerAndGenerate(Register register) {
+        register.check();
+        final Account oldAccount = accountService.findByEmail(register.getEmail());
+        if (Objects.nonNull(oldAccount)) {
             throw new BusinessException(4000, "该邮箱已注册");
         }
-        final User user = new User();
-        user.setEmail(emailAndPassword.getEmail());
-        user.setPassword(emailAndPassword.getPassword());
-        user.setCreatedTime(LocalDateTime.now());
-        usersService.save(user);
-        final String refreshToken = refreshTokenService.create(user.getId());
-        final String accessToken = accessTokenService.create(refreshToken, user.getId());
+        final Account account = new Account();
+        account.setEmail(register.getEmail());
+        account.setPassword(register.getPassword());
+        account.setCreatedTime(LocalDateTime.now());
+        accountService.save(account);
+        accountRegisterProducer.accountRegister(account.getId(), account.getEmail(), register.getNickName());
+        final String refreshToken = refreshTokenService.create(account.getId());
+        final String accessToken = accessTokenService.create(refreshToken, account.getId());
         return new Token(refreshToken, accessToken);
     }
 
@@ -77,8 +84,8 @@ public class TokenServiceImpl implements ITokenService {
         if (token.getExpirationTime().isBefore(LocalDateTime.now())) {
             throw new BusinessException(4005, "访问token已过期");
         }
-        final User user = usersService.getById(token.getUserId());
-        return new LoginUserInfo(user.getId(), user.getEmail());
+        final Account account = accountService.getById(token.getUserId());
+        return new LoginUserInfo(account.getId(), account.getEmail());
     }
 
     @Override

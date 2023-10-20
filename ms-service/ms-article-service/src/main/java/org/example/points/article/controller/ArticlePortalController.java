@@ -24,9 +24,9 @@ public class ArticlePortalController {
     /**
      * 首页查询文章列表
      */
-    @GetMapping("")
-    public CommonResponse<PageResult<ArticleVO>> portal(PortalArticleQueryParam queryParam) {
-        PageResult<ArticleVO> result = portalArticleService.portal(queryParam);
+    @GetMapping("/column/{columnId}")
+    public CommonResponse<PageResult<ArticleVO>> portal(@PathVariable("columnId") Integer columnId, PortalArticleQueryParam queryParam) {
+        PageResult<ArticleVO> result = portalArticleService.portal(columnId,queryParam);
         return new CommonResponse<>(200, "success", result);
     }
 

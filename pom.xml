@@ -22,6 +22,7 @@
         <module>ms-auth-service</module>
         <module>ms-gateway</module>
         <module>ms-service</module>
+        <module>minio-boot-starter</module>
     </modules>
 
     <properties>
@@ -34,6 +35,9 @@
         <fastjson.version>2.0.21</fastjson.version>
         <commons-collection4>4.4</commons-collection4>
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
+        <rocketmq-spring-boot-starter.version>2.2.3</rocketmq-spring-boot-starter.version>
+        <minio-java-sdk.version>8.3.0</minio-java-sdk.version>
+        <okhttp3.version>4.9.1</okhttp3.version>
     </properties>
 
     <dependencyManagement>
@@ -51,6 +55,16 @@
                 <version>2020.0.1</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio-java-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -81,6 +95,11 @@
                 <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

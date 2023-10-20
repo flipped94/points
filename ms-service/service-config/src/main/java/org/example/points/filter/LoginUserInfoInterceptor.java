@@ -4,6 +4,7 @@ import org.example.points.common.constant.Constant;
 import org.example.points.common.exception.BusinessException;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.LoginUserInfo;
+import org.example.points.config.WhiteList;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,9 +31,16 @@ public class LoginUserInfoInterceptor implements HandlerInterceptor {
     @Resource
     private DiscoveryClient discoveryClient;
 
+    @Resource
+    private WhiteList whitelist;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        for (String whiteUrl : whitelist.getUrls()) {
+            if (request.getRequestURI().contains(whiteUrl)) {
+                return true;
+            }
+        }
         final String accessToken = request.getHeader(Constant.HEADER_ACCESS_TOKEN);
         final ServiceInstance instance = discoveryClient.getInstances(Constant.AUTH_SERVICE_ID).get(0);
         final String url = String.format(Constant.PARSE_TOKEN_URI, instance.getHost(), instance.getPort());

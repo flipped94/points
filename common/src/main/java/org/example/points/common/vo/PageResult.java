@@ -10,8 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageResult<T> {
-
-    private long page;            // 当前页数
-    private long total;            // 总页数
-    private List<T> rows;        // 每行显示的内容
+    private long currentPage;
+    private long pageSize;
+    private long count;
+    private List<T> list;
 }

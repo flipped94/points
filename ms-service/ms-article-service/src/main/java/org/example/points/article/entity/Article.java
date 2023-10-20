@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.points.article.ArticleCreateReqVO;
 import org.example.points.article.ArticleVO;
+import org.example.points.common.Avatar;
 import org.example.points.common.enums.ArticleAppointType;
 import org.example.points.common.enums.ArticleReviewStatus;
 import org.example.points.common.enums.YesOrNo;
@@ -39,6 +40,8 @@ public class Article implements Serializable {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+
+    private Integer columnId;
 
     /**
      * 文章标题
@@ -119,10 +122,12 @@ public class Article implements Serializable {
         article.setStatus(ArticleReviewStatus.REVIEWING.type);
         article.setCommentCounts(0);
         article.setReadCounts(0);
+        article.setColumnId(reqVO.getColumn());
         article.setAuthorId(AccessContext.getLoginUserInfo().getId());
 
         article.setIsDelete(YesOrNo.NO.type);
         article.setCreateTime(LocalDateTime.now());
+        article.setPublishTime(LocalDateTime.now());
         article.setUpdateTime(LocalDateTime.now());
 
         if (Objects.equals(article.getIsAppoint(), ArticleAppointType.TIMING.type)) {
@@ -134,9 +139,14 @@ public class Article implements Serializable {
     }
 
     public static ArticleVO toVO(Article article) {
-        ArticleVO articleVO = new ArticleVO();
-        BeanUtils.copyProperties(article, articleVO);
-        return articleVO;
+        return ArticleVO.builder()
+                ._id(article.getId())
+                .title(article.getTitle())
+                .excerpt("")
+                .content(article.getContent())
+                .image(new Avatar(0, article.getArticleCover(), LocalDateTime.now()))
+                .column(article.getColumnId() + "")
+                .createdAt(article.getCreateTime()).build();
     }
 
     public static List<ArticleVO> toVO(List<Article> articles) {

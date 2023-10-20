@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.points.author.mapper.AuthorMapper">
+    <sql id="selectAllFields">
+        select id, account_id, email, avatar, description, nick_name, birthday, province, city, district, created_time,
+        updated_time
+    </sql>
+    <select id="findByAccountId" resultType="org.example.points.author.entity.Author">
+        <include refid="selectAllFields"/>
+        from t_author
+        where account_id=#{accountId}
+    </select>
+</mapper>

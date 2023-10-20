@@ -22,6 +22,8 @@
         <module>service-config</module>
         <module>service-sdk</module>
         <module>ms-article-service</module>
+        <module>ms-author-service</module>
+        <module>ms-oss-service</module>
     </modules>
 
     <dependencies>

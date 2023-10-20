@@ -51,9 +51,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .eq("is_delete", YesOrNo.NO.type)
                 .eq(Objects.nonNull(queryParam.getStatus()), "status", queryParam.getStatus())
                 .orderByDesc("create_time");
-        final Page<Article> page = page(new Page<>(queryParam.getPage(), queryParam.getPageSize()), queryWrapper);
+        final Page<Article> page = page(new Page<>(queryParam.getCurrentPage(), queryParam.getPageSize()), queryWrapper);
         final List<Article> records = page.getRecords();
-        return new PageResult<>(page.getCurrent(), page.getTotal(), Article.toVO(records));
+        return new PageResult<>(page.getCurrent(), page.getSize(), page.getPages(), Article.toVO(records));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void update(ArticleVO articleVO) {
-        final Article article = getById(articleVO.getId());
+        final Article article = getById(articleVO.get_id());
         if (Objects.isNull(article)) {
             throw new BusinessException(5000, "文章不存在");
         }

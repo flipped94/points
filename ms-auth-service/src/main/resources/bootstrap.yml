@@ -16,3 +16,11 @@ spring:
             group: common
           - data-id: application.yml
             group: ms-auth
+
+rocketmq:
+  name-server: 192.168.137.133:9876
+  producer:
+    group: author
+    send-message-timeout: 3000
+    retry-times-when-send-async-failed: 3
+    retry-times-when-send-failed: 3

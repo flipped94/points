@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ms-oss-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.137.133:8848
+        namespace: points-dev
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        namespace: points-dev
+        extension-configs:
+          - dataId: application.yml
+            group: ms-oss

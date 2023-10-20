@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ms-author-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.137.133:8848
+        namespace: points-dev
+
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        file-extension: yml
+        extension-configs:
+          - data-id: common.yml
+            group: common
+          - data-id: application.yml
+            group: ms-author
+
+rocketmq:
+  name-server: 192.168.137.133:9876

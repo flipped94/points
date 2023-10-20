@@ -1,17 +1,45 @@
 package org.example.points.article;
 
+import lombok.Builder;
 import lombok.Data;
+import org.example.points.author.AuthorInfo;
+import org.example.points.common.Avatar;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class ArticleVO {
-    private String id;
+    private Integer _id;
 
     /**
      * 文章标题
      */
     private String title;
+
+    /**
+     * 摘录
+     */
+    private String excerpt;
+
+    /**
+     * 文章内容，长度不超过9999，需要在前后端判断
+     */
+    private String content;
+
+    /**
+     * 封面图
+     */
+    private Avatar image;
+
+    /**
+     * 作者
+     */
+    private AuthorInfo author;
+
+    private String column;
+
+    private LocalDateTime createdAt;
 
     /**
      * 文章所属分类id
@@ -37,11 +65,6 @@ public class ArticleVO {
      * 文章状态，1：审核中（用户已提交），2：机审结束，等待人工审核，3：审核通过（已发布），4：审核未通过；5：文章撤回（已发布的情况下才能撤回和删除）
      */
     private Integer status;
-
-    /**
-     * 发布者用户id
-     */
-    private String authorId;
 
     /**
      * 文章发布时间（也是预约发布的时间）
@@ -73,8 +96,4 @@ public class ArticleVO {
      */
     private LocalDateTime updateTime;
 
-    /**
-     * 文章内容，长度不超过9999，需要在前后端判断
-     */
-    private String content;
 }
