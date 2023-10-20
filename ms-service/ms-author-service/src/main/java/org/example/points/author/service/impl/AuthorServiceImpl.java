@@ -1,6 +1,7 @@
 package org.example.points.author.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.example.points.author.AuthorCreate;
 import org.example.points.author.AuthorInfo;
 import org.example.points.author.AuthorUpdate;
@@ -62,7 +63,9 @@ public class AuthorServiceImpl extends ServiceImpl<AuthorMapper, Author> impleme
     public AuthorInfo updateAuthor(AuthorUpdate authorUpdate) {
         final Integer authorId = AccessContext.getLoginUserInfo().getId();
         final Author author = authorMapper.findByAccountId(authorId);
-        author.setAvatar(authorUpdate.getAvatar());
+        if (StringUtils.isNotBlank(authorUpdate.getAvatar().getUrl())) {
+            author.setAvatar(authorUpdate.getAvatar().getUrl());
+        }
         author.setDescription(authorUpdate.getDescription());
         author.setNickName(authorUpdate.getNickName());
         updateById(author);

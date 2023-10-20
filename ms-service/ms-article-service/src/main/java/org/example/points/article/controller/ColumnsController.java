@@ -3,12 +3,10 @@ package org.example.points.article.controller;
 import org.example.points.article.service.IColumnsService;
 import org.example.points.column.ColumnInfo;
 import org.example.points.column.ColumnReqV;
+import org.example.points.column.ColumnUpdate;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.PageResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -42,6 +40,12 @@ public class ColumnsController {
     @GetMapping("/author/{authorId}")
     public CommonResponse<ColumnInfo> authorColumn(@PathVariable("authorId") Integer authorId) {
         ColumnInfo columnInfo = columnsService.findByAuthorId(authorId);
+        return new CommonResponse<>(200, "success", columnInfo);
+    }
+
+    @PatchMapping("/{columnId}")
+    public CommonResponse<ColumnInfo> updateColumn(@PathVariable("columnId") Integer columnId, @RequestBody ColumnUpdate update) {
+        ColumnInfo columnInfo = columnsService.updateColumn(columnId, update);
         return new CommonResponse<>(200, "success", columnInfo);
     }
 }

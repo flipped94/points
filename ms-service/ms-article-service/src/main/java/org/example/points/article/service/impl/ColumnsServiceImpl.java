@@ -9,6 +9,7 @@ import org.example.points.article.service.IColumnsService;
 import org.example.points.column.ColumnCreate;
 import org.example.points.column.ColumnInfo;
 import org.example.points.column.ColumnReqV;
+import org.example.points.column.ColumnUpdate;
 import org.example.points.common.vo.PageResult;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +60,19 @@ public class ColumnsServiceImpl extends ServiceImpl<ColumnsMapper, Column> imple
         QueryWrapper<Column> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("author_id", authorId);
         final Column column = this.baseMapper.selectOne(queryWrapper);
+        return Column.toInfo(column);
+    }
+
+    @Override
+    public ColumnInfo updateColumn(Integer columnId, ColumnUpdate update) {
+        final Column column = getById(columnId);
+        if (Objects.isNull(column)) {
+            return null;
+        }
+        column.setAvatar(update.getAvatar().getUrl());
+        column.setTitle(update.getTitle());
+        column.setDescription(update.getDescription());
+        updateById(column);
         return Column.toInfo(column);
     }
 }

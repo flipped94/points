@@ -1,11 +1,11 @@
-package org.example.points.author;
+package org.example.points.column;
 
 import lombok.Data;
 import org.example.points.common.Avatar;
 
 @Data
-public class AuthorUpdate {
-    private String nickName;
+public class ColumnUpdate {
+    private String title;
     private String description;
     private Avatar avatar;
 }

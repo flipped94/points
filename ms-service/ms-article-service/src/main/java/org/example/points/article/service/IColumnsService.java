@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.points.column.ColumnCreate;
 import org.example.points.column.ColumnInfo;
 import org.example.points.column.ColumnReqV;
+import org.example.points.column.ColumnUpdate;
 import org.example.points.common.vo.PageResult;
 
 /**
@@ -24,4 +25,6 @@ public interface IColumnsService extends IService<Column> {
     ColumnInfo findById(Integer id);
 
     ColumnInfo findByAuthorId(Integer authorId);
+
+    ColumnInfo updateColumn(Integer columnId, ColumnUpdate update);
 }
