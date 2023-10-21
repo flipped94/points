@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class ArticleVO {
+
+    /**
+     * id
+     */
     private Integer _id;
 
     /**
@@ -22,8 +26,10 @@ public class ArticleVO {
      */
     private String excerpt;
 
+    private Boolean isHTML;
+
     /**
-     * 文章内容，长度不超过9999，需要在前后端判断
+     * 文章内容，长度不超过9999，需要在前后端判断 isHTML为true则是html链接否则是原始内容
      */
     private String content;
 
@@ -40,6 +46,9 @@ public class ArticleVO {
     private String column;
 
     private LocalDateTime createdAt;
+
+
+    // ========== 待扩展信息 =========
 
     /**
      * 文章所属分类id

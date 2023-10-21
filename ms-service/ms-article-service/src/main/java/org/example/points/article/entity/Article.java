@@ -41,6 +41,9 @@ public class Article implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * column
+     */
     private Integer columnId;
 
     /**
@@ -48,10 +51,35 @@ public class Article implements Serializable {
      */
     private String title;
 
+
     /**
-     * 文章内容，长度不超过9999，需要在前后端判断
+     * 摘录
      */
-    private String content;
+    private String excerpt;
+
+    /**
+     * 是否转为html
+     */
+    private Integer isHtml;
+
+    private String htmlUrl;
+
+    /**
+     * 文章封面图，article_type=1 的时候展示
+     */
+    private String articleCover;
+
+    /**
+     * 发布者用户id
+     */
+    private Integer authorId;
+
+    /**
+     * 文章发布时间（也是预约发布的时间）
+     */
+    private LocalDateTime publishTime;
+
+    // ================ 待扩展 =============
 
     /**
      * 文章所属分类id
@@ -64,11 +92,6 @@ public class Article implements Serializable {
     private Integer articleType;
 
     /**
-     * 文章封面图，article_type=1 的时候展示
-     */
-    private String articleCover;
-
-    /**
      * 是否是预约定时发布的文章，1：预约（定时）发布，0：即时发布    在预约时间到点的时候，把1改为0，则发布
      */
     private Integer isAppoint;
@@ -77,16 +100,6 @@ public class Article implements Serializable {
      * 文章状态，1：审核中（用户已提交），2：机审结束，等待人工审核，3：审核通过（已发布），4：审核未通过；5：文章撤回（已发布的情况下才能撤回和删除）
      */
     private Integer status;
-
-    /**
-     * 发布者用户id
-     */
-    private Integer authorId;
-
-    /**
-     * 文章发布时间（也是预约发布的时间）
-     */
-    private LocalDateTime publishTime;
 
     /**
      * 用户累计点击阅读数（喜欢数）（点赞） - 放redis
@@ -124,7 +137,10 @@ public class Article implements Serializable {
         article.setReadCounts(0);
         article.setColumnId(reqVO.getColumn());
         article.setAuthorId(AccessContext.getLoginUserInfo().getId());
-
+        article.setArticleCover(reqVO.getImage());
+        article.setIsHtml(YesOrNo.NO.type);
+        article.setHtmlUrl("");
+        article.setExcerpt(reqVO.getContent().substring(0, 120));
         article.setIsDelete(YesOrNo.NO.type);
         article.setCreateTime(LocalDateTime.now());
         article.setPublishTime(LocalDateTime.now());
@@ -142,11 +158,12 @@ public class Article implements Serializable {
         return ArticleVO.builder()
                 ._id(article.getId())
                 .title(article.getTitle())
+                .isHTML(article.getIsHtml().equals(YesOrNo.YES.type))
+                .content(article.getHtmlUrl())
                 .excerpt("")
-                .content(article.getContent())
                 .image(new Avatar(0, article.getArticleCover(), LocalDateTime.now()))
                 .column(article.getColumnId() + "")
-                .createdAt(article.getCreateTime()).build();
+                .createdAt(article.getPublishTime()).build();
     }
 
     public static List<ArticleVO> toVO(List<Article> articles) {

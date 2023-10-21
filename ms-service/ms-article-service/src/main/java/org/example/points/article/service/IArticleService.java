@@ -17,7 +17,7 @@ import org.example.points.common.vo.PageResult;
  */
 public interface IArticleService extends IService<Article> {
 
-    Integer create(ArticleCreateReqVO reqVO);
+    ArticleVO create(ArticleCreateReqVO reqVO);
 
     PageResult<ArticleVO> articles(ArticleQueryParam queryParam);
 

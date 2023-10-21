@@ -18,7 +18,7 @@ import org.example.points.common.vo.PageResult;
 public interface IPortalArticleService extends IService<Article> {
 
 
-    PageResult<ArticleVO> portal(Integer columnId,PortalArticleQueryParam queryParam);
+    PageResult<ArticleVO> portal(Integer columnId, PortalArticleQueryParam queryParam);
 
     PageResult<ArticleVO> authorPublished(Integer authorId, Page param);
 }

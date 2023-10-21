@@ -3,6 +3,7 @@ package org.example.points.article.controller;
 import org.example.points.article.ArticleCreateReqVO;
 import org.example.points.article.ArticleQueryParam;
 import org.example.points.article.ArticleVO;
+import org.example.points.article.service.IArticleContentService;
 import org.example.points.article.service.IArticleService;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.PageResult;
@@ -26,13 +27,16 @@ public class ArticlesController {
     @Resource(name = "articleService")
     private IArticleService articleService;
 
+    @Resource
+    private IArticleContentService articleContentService;
+
     /**
      * 发布文章
      */
     @PostMapping("")
-    public CommonResponse<Integer> publish(@RequestBody @Valid ArticleCreateReqVO reqVO) {
-        Integer id = articleService.create(reqVO);
-        return new CommonResponse<>(200, "success", id);
+    public CommonResponse<ArticleVO> publish(@RequestBody @Valid ArticleCreateReqVO reqVO) {
+        ArticleVO articleVO = articleService.create(reqVO);
+        return new CommonResponse<>(200, "success", articleVO);
     }
 
     /**
@@ -42,6 +46,12 @@ public class ArticlesController {
     public CommonResponse<PageResult<ArticleVO>> articles(ArticleQueryParam queryParam) {
         PageResult<ArticleVO> result = articleService.articles(queryParam);
         return new CommonResponse<>(200, "success", result);
+    }
+
+    @GetMapping("/content/{articleId}")
+    public CommonResponse<String> getContent(@PathVariable("articleId") Integer articleId) {
+        String content = articleContentService.findContentByArticleId(articleId);
+        return new CommonResponse<>(200, "success", content);
     }
 
     /**

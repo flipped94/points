@@ -8,16 +8,23 @@ import org.example.points.article.ArticleCreateReqVO;
 import org.example.points.article.ArticleQueryParam;
 import org.example.points.article.ArticleVO;
 import org.example.points.article.entity.Article;
+import org.example.points.article.entity.ArticleContent;
 import org.example.points.article.mapper.ArticleMapper;
+import org.example.points.article.mq.ArticlePublishProducer;
+import org.example.points.article.service.IArticleContentService;
 import org.example.points.article.service.IArticleService;
+import org.example.points.article.service.remote.AuthorService;
+import org.example.points.author.AuthorInfo;
 import org.example.points.common.enums.YesOrNo;
 import org.example.points.common.exception.BusinessException;
 import org.example.points.common.vo.PageResult;
 import org.example.points.filter.AccessContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,13 +42,35 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private ArticleMapper articleMapper;
 
+    @Resource
+    private ArticlePublishProducer articlePublishProducer;
+
+    @Resource
+    private IArticleContentService articleContentService;
+
+    @Resource
+    private AuthorService authorService;
+
+
     @Override
-    public Integer create(ArticleCreateReqVO reqVO) {
+    @Transactional
+    public ArticleVO create(ArticleCreateReqVO reqVO) {
         reqVO.check();
-        // TODO 分类检查
         Article article = Article.toEntity(reqVO);
-        articleMapper.insert(article);
-        return article.getId();
+        final boolean saveArticle = save(article);
+        ArticleContent articleContent = new ArticleContent();
+        articleContent.setArticleId(article.getId());
+        articleContent.setContent(reqVO.getContent());
+        articleContent.setCreateTime(LocalDateTime.now());
+        articleContent.setUpdateTime(LocalDateTime.now());
+        final boolean saveContent = articleContentService.save(articleContent);
+        if (saveArticle && saveContent) {
+            articlePublishProducer.publish(article.getId(), reqVO.getContent());
+            final ArticleVO articleVO = handleAuthor(article);
+            articleVO.setContent(reqVO.getContent());
+            return articleVO;
+        }
+        throw new BusinessException(5001, "发表失败");
     }
 
     @Override
@@ -83,5 +112,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
         BeanUtils.copyProperties(articleVO, article);
         updateById(article);
+    }
+
+    private ArticleVO handleAuthor(Article article) {
+        final Integer authorId = article.getAuthorId();
+        final AuthorInfo authorInfo = authorService.findById(authorId);
+        final ArticleVO vo = Article.toVO(article);
+        vo.setAuthor(authorInfo);
+        return vo;
     }
 }

@@ -4,17 +4,21 @@
 
     <sql id="selectVO">
         select id,
+        column,
         title,
-        content,
+        article_cover,
+        is_html,
+        html_url,
+        publish_time,
+
         category_id,
         article_type,
-        article_cover,
         is_appoint,
         status,
         author_id,
-        publish_time,
         read_counts,
         comment_counts,
+
         create_time,
         update_time
     </sql>
