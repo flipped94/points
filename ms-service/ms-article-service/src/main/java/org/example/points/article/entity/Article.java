@@ -12,6 +12,7 @@ import org.example.points.common.enums.ArticleAppointType;
 import org.example.points.common.enums.ArticleReviewStatus;
 import org.example.points.common.enums.YesOrNo;
 import org.example.points.filter.AccessContext;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
