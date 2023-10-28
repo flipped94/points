@@ -21,7 +21,7 @@ import org.example.points.common.vo.PageResult;
 import org.example.points.filter.AccessContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -51,26 +51,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Resource
     private AuthorService authorService;
 
+    @Resource
+    private TransactionTemplate transactionTemplate;
+
 
     @Override
-    @Transactional
     public ArticleVO create(ArticleCreateReqVO reqVO) {
         reqVO.check();
         Article article = Article.toEntity(reqVO);
-        final boolean saveArticle = save(article);
         ArticleContent articleContent = new ArticleContent();
         articleContent.setArticleId(article.getId());
         articleContent.setContent(reqVO.getContent());
         articleContent.setCreateTime(LocalDateTime.now());
         articleContent.setUpdateTime(LocalDateTime.now());
-        final boolean saveContent = articleContentService.save(articleContent);
-        if (saveArticle && saveContent) {
-            articlePublishProducer.publish(article.getId(), reqVO.getContent());
-            final ArticleVO articleVO = handleAuthor(article);
-            articleVO.setContent(reqVO.getContent());
-            return articleVO;
-        }
-        throw new BusinessException(5001, "发表失败");
+        transactionTemplate.execute(status -> {
+            save(article);
+            articleContentService.save(articleContent);
+            return null;
+        });
+        articlePublishProducer.publish(article.getId(), reqVO.getContent());
+        final ArticleVO articleVO = handleAuthor(article);
+        articleVO.setContent(reqVO.getContent());
+        return articleVO;
     }
 
     @Override
