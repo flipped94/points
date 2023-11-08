@@ -23,16 +23,16 @@ public class AccountRegisterListener implements RocketMQListener<String> {
     public void onMessage(String accountRegisterStr) {
         final AccountRegister accountRegister = JSON.parseObject(accountRegisterStr, AccountRegister.class);
         int i = 0;
-        try {
-            for (; i < 3; i++) {
+        for (; i < 3; i++) {
+            try {
                 AuthorCreate create = new AuthorCreate(accountRegister.getAuthorId(), accountRegister.getEmail(), accountRegister.getNickName());
                 final Integer created = authorService.create(create);
                 if (Objects.nonNull(created) & created > 0) {
                     return;
                 }
+            } catch (Exception e) {
+                log.error("作家{}第{}次创建失败: {}", accountRegister.getAuthorId(), i + 1, e.getMessage());
             }
-        } catch (Exception e) {
-            log.error("作家{}第{}次创建失败", accountRegister.getAuthorId(), i);
         }
         log.error("作家{}创建失败", accountRegister.getAuthorId());
     }

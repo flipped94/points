@@ -5,6 +5,7 @@ import org.example.points.article.ArticleQueryParam;
 import org.example.points.article.ArticleVO;
 import org.example.points.article.service.IArticleContentService;
 import org.example.points.article.service.IArticleService;
+import org.example.points.common.annotation.LoginCheck;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.common.vo.PageResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class ArticlesController {
      * 发布文章
      */
     @PostMapping("")
+    @LoginCheck
     public CommonResponse<ArticleVO> publish(@RequestBody @Valid ArticleCreateReqVO reqVO) {
         ArticleVO articleVO = articleService.create(reqVO);
         return new CommonResponse<>(200, "success", articleVO);
@@ -43,6 +45,7 @@ public class ArticlesController {
      * 当前用户的文章
      */
     @GetMapping("")
+    @LoginCheck
     public CommonResponse<PageResult<ArticleVO>> articles(ArticleQueryParam queryParam) {
         PageResult<ArticleVO> result = articleService.articles(queryParam);
         return new CommonResponse<>(200, "success", result);
@@ -58,6 +61,7 @@ public class ArticlesController {
      * 用户删除文章
      */
     @DeleteMapping("/{articleId}")
+    @LoginCheck
     public CommonResponse<Void> delete(@PathVariable("articleId") String articleId) {
         articleService.delete(articleId);
         return new CommonResponse<>(200, "success");
@@ -67,6 +71,7 @@ public class ArticlesController {
      * 更新文章
      */
     @PutMapping("")
+    @LoginCheck
     public CommonResponse<Void> update(@RequestBody ArticleVO articleVO) {
         articleService.update(articleVO);
         return new CommonResponse<>(200, "success");

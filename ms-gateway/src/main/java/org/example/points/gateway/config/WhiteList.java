@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Configuration
 @RefreshScope
-@ConfigurationProperties(prefix = "routes")
+@ConfigurationProperties(prefix = "whitelist")
 public class WhiteList {
     private List<String> urls;
 }

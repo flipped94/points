@@ -5,4 +5,7 @@
     <select id="findContentByArticleId" resultType="java.lang.String">
         select content from t_article_content where article_id = #{articleId}
     </select>
+    <select id="findByArticleId" resultType="org.example.points.article.entity.ArticleContent">
+        select * from t_article_content where article_id = #{articleId}
+    </select>
 </mapper>

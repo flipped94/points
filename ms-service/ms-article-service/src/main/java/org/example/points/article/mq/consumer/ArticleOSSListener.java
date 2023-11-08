@@ -1,4 +1,4 @@
-package org.example.points.article.mq;
+package org.example.points.article.mq.consumer;
 
 import com.alibaba.fastjson.JSON;
 import io.minio.MinioClient;
@@ -11,24 +11,24 @@ import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.example.points.article.entity.Article;
 import org.example.points.article.service.IArticleService;
-import org.example.points.article.service.IHtmlService;
 import org.example.points.common.enums.YesOrNo;
+import org.example.points.common.utils.MarkdownUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.UUID;
 
+/**
+ * 保存到ES
+ */
 @Slf4j
 @Component
-@RocketMQMessageListener(nameServer = "192.168.137.133:9876", topic = "article-publish", consumerGroup = "articleGroup")
-public class ArticlePublishedListener implements RocketMQListener<String> {
+@RocketMQMessageListener(nameServer = "192.168.137.133:9876", topic = "article-publish", consumerGroup = "articleOssGroup")
+public class ArticleOSSListener implements RocketMQListener<String> {
 
     @Resource
     private IArticleService articleService;
-
-    @Resource
-    private IHtmlService IHtmlService;
 
     @Resource
     private MinioClient minioClient;
@@ -37,8 +37,10 @@ public class ArticlePublishedListener implements RocketMQListener<String> {
     @Override
     public void onMessage(String s) {
         final ArticlePublish articlePublish = JSON.parseObject(s, ArticlePublish.class);
-        final String html = IHtmlService.markdownToHtml(articlePublish.getContent());
+        final String html = MarkdownUtil.markdownToHtml(articlePublish.getContent());
+        final String excerpt = MarkdownUtil.markdownToPlainText(articlePublish.getContent()).substring(0, 100);
         final Article article = articleService.getById(articlePublish.articleId);
+        article.setExcerpt(excerpt);
         InputStream inputStream = IOUtils.toInputStream(html);
         int i;
         for (i = 0; i < 3; i++) {
@@ -57,10 +59,9 @@ public class ArticlePublishedListener implements RocketMQListener<String> {
                     return;
                 }
             } catch (Exception e) {
-                log.error("{}", e.toString());
-                e.printStackTrace();
+                log.error("文章编号{}第{}次静态化失败: {}", article.getId(), i + 1, e.getMessage());
             }
-            log.error("文章编号{}第{}次静态化失败", article.getId(), i + 1);
+
         }
         log.error("文章编号{}静态化失败", article.getId());
     }

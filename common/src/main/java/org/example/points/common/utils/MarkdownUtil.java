@@ -1,21 +1,22 @@
-package org.example.points.article.service.impl;
+package org.example.points.common.utils;
 
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.example.points.article.service.IHtmlService;
-import org.springframework.stereotype.Service;
+import org.commonmark.renderer.text.TextContentRenderer;
 
-@Service("htmlService")
-public class IHtmlServiceImpl implements IHtmlService {
+public class MarkdownUtil {
 
     private static final Parser parser;
 
     private static final HtmlRenderer renderer;
 
+    private static final TextContentRenderer textContentRenderer;
+
     static {
         parser = Parser.builder().build();
         renderer = HtmlRenderer.builder().build();
+        textContentRenderer = TextContentRenderer.builder().build();
     }
 
     /**
@@ -24,8 +25,13 @@ public class IHtmlServiceImpl implements IHtmlService {
      * @param markdown markdown 内容
      * @return html 内容
      */
-    public String markdownToHtml(String markdown) {
+    public static String markdownToHtml(String markdown) {
         final Node document = parser.parse(markdown);
         return renderer.render(document);
+    }
+
+    public static String markdownToPlainText(String markdown) {
+        final Node document = parser.parse(markdown);
+        return textContentRenderer.render(document);
     }
 }

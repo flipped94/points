@@ -3,10 +3,11 @@ package org.example.points.article.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -40,12 +41,27 @@ public class ArticleContent implements Serializable {
     private String content;
 
     /**
+     * 摘录
+     */
+    private String excerpt;
+
+    /**
+     * 纯文本
+     */
+    private String plainText;
+
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
      * 文章的创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
 
     /**
      * 文章的修改时间
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
 }

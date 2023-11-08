@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-article-service
+    name: ms-search-service
   cloud:
     nacos:
       discovery:
@@ -12,7 +12,5 @@ spring:
         namespace: ${spring.cloud.nacos.discovery.namespace}
         file-extension: yml
         extension-configs:
-          - data-id: common.yml
-            group: common
           - data-id: application.yml
-            group: ms-article
+            group: ms-search

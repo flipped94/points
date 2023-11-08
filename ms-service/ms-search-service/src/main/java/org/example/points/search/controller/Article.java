@@ -4,20 +4,22 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
-@Document(indexName = "stu")
+@Document(indexName = "article")
 public class Article {
 
     @Id
-    private Integer id;
+    @Field(type = FieldType.Long)
+    private Integer articleId;
 
-    @Field(analyzer = "ik_max_work")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String title;
 
-    @Field(analyzer = "ik_max_work")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String excerpt;
 
-    @Field(analyzer = "ik_max_work")
-    private String content;
+    @Field(type = FieldType.Text, name = "plain_text", analyzer = "ik_max_word")
+    private String plainText;
 }

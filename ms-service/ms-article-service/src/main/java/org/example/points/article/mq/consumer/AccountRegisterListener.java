@@ -1,4 +1,4 @@
-package org.example.points.article.mq;
+package org.example.points.article.mq.consumer;
 
 
 import com.alibaba.fastjson.JSON;
@@ -23,9 +23,9 @@ public class AccountRegisterListener implements RocketMQListener<String> {
     @Override
     public void onMessage(String accountRegisterStr) {
         final AccountRegister accountRegister = JSON.parseObject(accountRegisterStr, AccountRegister.class);
-        int i = 0;
-        try {
-            for (; i < 3; i++) {
+
+        for (int i = 0; i < 3; i++) {
+            try {
                 String title = String.format("%s的专栏", accountRegister.getNickName());
                 String description = String.format("这是的%s专栏，有一段非常有意思的简介，可以更新一下欧", accountRegister.getNickName());
                 ColumnCreate create = new ColumnCreate(title, description, accountRegister.getAuthorId());
@@ -33,9 +33,9 @@ public class AccountRegisterListener implements RocketMQListener<String> {
                 if (created != null && created > 0) {
                     return;
                 }
+            } catch (Exception e) {
+                log.error("{}的专栏第{}次创建失败: {}", accountRegister.getAuthorId(), i + 1, e.getMessage());
             }
-        } catch (Exception e) {
-            log.error("{}的专栏第{}次创建失败", accountRegister.getAuthorId(), i);
         }
         log.error("{}的专栏创建失败", accountRegister.getAuthorId());
     }

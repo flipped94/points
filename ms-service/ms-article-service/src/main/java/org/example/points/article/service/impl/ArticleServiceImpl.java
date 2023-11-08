@@ -10,7 +10,7 @@ import org.example.points.article.ArticleVO;
 import org.example.points.article.entity.Article;
 import org.example.points.article.entity.ArticleContent;
 import org.example.points.article.mapper.ArticleMapper;
-import org.example.points.article.mq.ArticlePublishProducer;
+import org.example.points.article.mq.producer.ArticlePublishProducer;
 import org.example.points.article.service.IArticleContentService;
 import org.example.points.article.service.IArticleService;
 import org.example.points.article.service.remote.AuthorService;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,12 +59,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         reqVO.check();
         Article article = Article.toEntity(reqVO);
         ArticleContent articleContent = new ArticleContent();
-        articleContent.setArticleId(article.getId());
+        articleContent.setTitle(reqVO.getTitle());
         articleContent.setContent(reqVO.getContent());
-        articleContent.setCreateTime(LocalDateTime.now());
-        articleContent.setUpdateTime(LocalDateTime.now());
+        articleContent.setCreatedTime(article.getCreatedTime());
         transactionTemplate.execute(status -> {
             save(article);
+            articleContent.setArticleId(article.getId());
             articleContentService.save(articleContent);
             return null;
         });
@@ -89,31 +88,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void delete(String articleId) {
-        final Article article = getById(articleId);
-        if (Objects.isNull(article)) {
-            throw new BusinessException(5000, "文章不存在");
-        }
-        if (!article.getAuthorId().equals(AccessContext.getLoginUserInfo().getId())) {
-            throw new BusinessException(5001, "权限不足");
-        }
         UpdateWrapper<Article> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", articleId)
-                .eq("publish_user_id", AccessContext.getLoginUserInfo().getId())
+                .eq("author_id", AccessContext.getLoginUserInfo().getId())
                 .set("is_delete", YesOrNo.YES.type);
-        update(updateWrapper);
+        final boolean deleted = update(updateWrapper);
+        if (!deleted) {
+            throw new BusinessException(5001, "删除失败");
+        }
     }
 
     @Override
     public void update(ArticleVO articleVO) {
-        final Article article = getById(articleVO.get_id());
-        if (Objects.isNull(article)) {
-            throw new BusinessException(5000, "文章不存在");
-        }
-        if (!article.getAuthorId().equals(AccessContext.getLoginUserInfo().getId())) {
-            throw new BusinessException(5001, "权限不足");
-        }
+        final Article article = new Article();
         BeanUtils.copyProperties(articleVO, article);
-        updateById(article);
+        article.setAuthorId(AccessContext.getLoginUserInfo().getId());
+        final boolean updated = updateById(article);
+        if (!updated) {
+            throw new BusinessException(5001, "修改失败");
+        }
     }
 
     private ArticleVO handleAuthor(Article article) {

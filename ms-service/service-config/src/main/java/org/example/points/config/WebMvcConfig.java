@@ -19,7 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加用户身份统一登录拦截的拦截器
-        registry.addInterceptor(loginUserInfoInterceptor)
-                .excludePathPatterns("/article/portal", "/article/portal/**").order(0);
+        registry.addInterceptor(loginUserInfoInterceptor);
+//                .excludePathPatterns("/article/portal", "/article/portal/**").order(0);
     }
 }

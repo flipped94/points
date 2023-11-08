@@ -4,6 +4,7 @@ import org.example.points.author.AuthorCreate;
 import org.example.points.author.AuthorInfo;
 import org.example.points.author.AuthorUpdate;
 import org.example.points.author.service.IAuthorService;
+import org.example.points.common.annotation.LoginCheck;
 import org.example.points.common.vo.CommonResponse;
 import org.example.points.filter.AccessContext;
 import org.springframework.validation.annotation.Validated;
@@ -27,12 +28,14 @@ public class AuthorController {
     private IAuthorService authorService;
 
     @PostMapping("")
+    @LoginCheck
     public CommonResponse<String> create(@RequestBody @Validated AuthorCreate authorCreate) {
         Integer id = authorService.create(authorCreate);
         return new CommonResponse<>(200, "success");
     }
 
     @GetMapping("/current")
+    @LoginCheck
     public CommonResponse<AuthorInfo> current() {
         final Integer accountId = AccessContext.getLoginUserInfo().getId();
         AuthorInfo current = authorService.findByAccountId(accountId);
@@ -47,6 +50,7 @@ public class AuthorController {
 
 
     @PatchMapping("")
+    @LoginCheck
     public CommonResponse<AuthorInfo> author(@RequestBody @Validated AuthorUpdate authorUpdate) {
         AuthorInfo authorInfo = authorService.updateAuthor(authorUpdate);
         return new CommonResponse<>(200, "success", authorInfo);

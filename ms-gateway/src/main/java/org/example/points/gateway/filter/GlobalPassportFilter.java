@@ -31,7 +31,7 @@ import java.util.function.Function;
 /**
  * <h1>全局登录鉴权过滤器</h1>
  */
-@Component
+//@Component
 public class GlobalPassportFilter implements GlobalFilter, Ordered {
 
     @Resource

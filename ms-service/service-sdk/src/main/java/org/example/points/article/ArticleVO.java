@@ -1,5 +1,6 @@
 package org.example.points.article;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import org.example.points.author.AuthorInfo;
@@ -45,6 +46,7 @@ public class ArticleVO {
 
     private String column;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createdAt;
 
 

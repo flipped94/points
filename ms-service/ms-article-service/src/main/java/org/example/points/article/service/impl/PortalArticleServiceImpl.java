@@ -43,7 +43,7 @@ public class PortalArticleServiceImpl extends ServiceImpl<ArticleMapper, Article
         queryWrapper.eq(Objects.nonNull(queryParam.getCategory()), "category", queryParam.getCategory())
                 .eq("is_delete", YesOrNo.NO.type)
                 .eq("column_id", columnId)
-                .orderByDesc("create_time");
+                .orderByDesc("created_time");
         final Page<Article> page = page(new Page<>(queryParam.getCurrentPage(), queryParam.getPageSize()), queryWrapper);
         final List<Article> records = page.getRecords();
         final List<ArticleVO> articleVOS = handleAuthor(records);

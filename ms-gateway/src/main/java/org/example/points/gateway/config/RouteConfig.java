@@ -27,7 +27,7 @@ public class RouteConfig {
                                 "/passport/register",
                                 "/passport/refresh",
                                 "/passport/parse"
-                        ).uri("http://localhost:9000/")
+                        ).uri("http://localhost:8080/")
                 ).build();
     }
 }

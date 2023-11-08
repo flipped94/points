@@ -1,4 +1,4 @@
-package org.example.points.article.mq;
+package org.example.points.article.mq.producer;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;

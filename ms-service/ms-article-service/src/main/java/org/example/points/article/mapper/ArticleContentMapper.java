@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface ArticleContentMapper extends BaseMapper<ArticleContent> {
 
     String findContentByArticleId(Integer articleId);
+
+    ArticleContent findByArticleId(Integer articleId);
 }

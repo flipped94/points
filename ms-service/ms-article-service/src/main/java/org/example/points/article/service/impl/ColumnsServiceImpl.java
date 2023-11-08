@@ -72,6 +72,7 @@ public class ColumnsServiceImpl extends ServiceImpl<ColumnsMapper, Column> imple
         column.setAvatar(update.getAvatar().getUrl());
         column.setTitle(update.getTitle());
         column.setDescription(update.getDescription());
+        column.setUpdatedTime(LocalDateTime.now());
         updateById(column);
         return Column.toInfo(column);
     }
