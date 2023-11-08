@@ -12,5 +12,14 @@ zheye后端项目
 我们就可以通过静态化来优化。
 
 ![](./doc/静态化.png)
-## TODO
-- Elasticsearch 文章搜索
+
+## 搜索
+通过 logstash 同步数据到 elasticsearch, [同步配置文件](./doc/logstash_mysql.conf)
+![](./doc/logstash_sync.png)
+
+## ES 和 Logstash 证书
+访问ES和通过Logstash同步数据需要信任证书, 运行 [InstallCert.java](./doc/InstallCert.java) 
+生成 **jssecacerts** 文件，将其复制到 `JAVA_HOME/jre/lib/security`下，覆盖`cacerts`文件
+```java
+java InstallCert.java [--proxy=proxyHost:proxyPort] host[:port] [passphrase]
+```
